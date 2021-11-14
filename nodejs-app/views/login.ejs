@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name=”viewport” content=”width=device-width,initial-scale=1.0″>
+  <title>Login</title>
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body class="noselect">
+  <div id="login">
+    <h1>
+      <a>Powered by KCBC</a>
+    </h1>
+    <h2>KCBC Live Streaming System</h2>
+
+    <form action="/confirm" method="post" autocomplete="off">
+      <% if (message && message.length !== 0) {%>
+      <p class="flash-error">
+        <%= message %>
+      </p>
+      <%}%>
+      <p>
+        <label>ユーザー名</label>
+        <input type="text" name="username" autofocus required />
+      </p>
+      <p>
+        <label>パスワード</label>
+        <input type="password" name="password" required />
+      </p>
+      <p class="submit">
+        <input type="submit" id="submit" value="ログイン" />
+        <div class="pointer">
+          <input type="checkbox" name="is_visible" id="is_visible" />
+          <label for="is_visible">パスワードを表示</label>
+        </div>
+      </p>
+    </form>
+  </div>
+
+  <script src="./js/form.js"></script>
+</body>
+</html>

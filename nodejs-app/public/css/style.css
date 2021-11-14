@@ -1,0 +1,132 @@
+body {
+  background: #f0f0f1;
+}
+
+/* 上下左右中央寄せ */
+.center {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+}
+
+/* テキストを選択できないように */
+.noselect {
+  user-select: none;
+}
+
+/* マウスホバー時のカーソルタイプ */
+.pointer {
+  cursor: pointer;
+}
+
+/* 動画フレーム */
+#video {
+  width: 100%;
+  height: 100%;
+}
+
+/* ログイン画面全体 */
+#login {
+  padding: 6% 0 0;
+}
+
+/* ロゴ */
+#login h1 a {
+  display: block;
+  background-image: url(../img/kcbc-logo-sq.png);
+  background-size: 124px;
+  background-repeat: no-repeat;
+  height: 124px;
+  margin: 0 auto;
+  width: 124px;
+
+  /* テキストを画像に置換 */
+  overflow: hidden;
+  text-indent: 100%;
+  white-space: nowrap;
+}
+
+#login h2 {
+  width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+/* フォーム全体 */
+#login form {
+  width: 320px;
+  margin: auto;
+  background: #fff;
+  padding: 26px 24px 34px;
+  border: 1px solid #c3c4c7;
+  border-radius: 4px;
+}
+
+#login form p {
+  margin: 0;
+}
+
+#login form input[type="text"],
+#login form input[type="password"] {
+  box-sizing: border-box;  /* これがないと横幅がはみ出る */
+  font-size: 24px;
+  width: 100%;
+  margin-bottom: 14px;
+  padding: 2px 8px;
+}
+
+#login form input[type=checkbox] {
+  transform: scale(1.4);
+}
+
+#login form input[type=submit] {
+  cursor: pointer;
+  background-color: #0981f1;
+  color: #fff;
+  margin: 0;
+  padding: 8px 14px;
+  float: right;
+  border: 0px none;
+  border-radius: 4px;
+}
+
+/* 認証エラー表示 */
+#login form .flash-error {
+  background-color: rgb(255, 245, 245);
+  border: 1px solid rgba(223, 0, 0, 0.4);
+  border-radius: 4px;
+  padding: 8px;
+  margin-bottom: 14px;
+}
+
+@media screen and (max-width: 480px) {
+  #login h2 {
+    width: 320px;
+    font-size: 20px;
+  }
+  #login form {
+    width: 240px;
+  }
+}
+
+@media screen and (max-height: 480px) {
+  #login {
+    padding: 0;
+  }
+  #login h1 {
+    margin-top: 2px;
+    margin-bottom: 0;
+  }
+  #login h1 a {
+    background-size: 90px;
+    height: 90px;
+    width: 90px;
+  }
+  #login h2 {
+    margin: 4px auto;
+  }
+  #login form {
+    padding: 16px 22px 24px;
+  }
+}

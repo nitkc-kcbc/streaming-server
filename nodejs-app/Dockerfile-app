@@ -1,0 +1,14 @@
+FROM node:16.13
+
+# アプリのディレクトリを作成
+WORKDIR /home/nodeapp
+
+# アプリの依存関係をインストール
+COPY ./package*.json ./
+RUN npm install
+
+# アプリのソースをバンドル
+COPY . .
+
+RUN mkdir -p /home/nodeapp/hls \
+  && chmod -R 777 /home/nodeapp/hls

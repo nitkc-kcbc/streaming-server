@@ -1,0 +1,28 @@
+version: '3'
+services:
+  app:
+    container_name: kcbc-streaming-server-app
+    build:
+      context: ./nodejs-app
+      dockerfile: Dockerfile-app
+    ports:
+      - 80:${APP_PORT}
+    env_file: .env
+    volumes:
+      - ./nodejs-app:/home/nodeapp
+      - hls:/home/nodeapp/hls
+    working_dir: /home/nodeapp
+    command: [sh, -c, node ./app.js]
+
+  nginx:
+    image: tiangolo/nginx-rtmp
+    container_name: kcbc-streaming-server-nginx
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile-nginx
+    ports:
+      - 1935:1935
+    volumes:
+      - hls:/home/nodeapp/hls
+volumes:
+  hls:
