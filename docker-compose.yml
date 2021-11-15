@@ -10,6 +10,7 @@ services:
     env_file: .env
     volumes:
       - ./nodejs-app:/home/nodeapp
+      - /home/nodeapp/node_modules
       - hls:/home/nodeapp/hls
     working_dir: /home/nodeapp
     command: [sh, -c, node ./app.js]
