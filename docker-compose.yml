@@ -16,7 +16,6 @@ services:
     command: [sh, -c, node ./app.js]
 
   nginx:
-    image: tiangolo/nginx-rtmp
     container_name: kcbc-streaming-server-nginx
     build:
       context: ./nginx
