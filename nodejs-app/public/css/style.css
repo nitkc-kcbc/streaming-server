@@ -100,6 +100,11 @@ body {
   margin-bottom: 14px;
 }
 
+/* モーダル */
+#welcome {
+  border-radius: 4px;
+}
+
 @media screen and (max-width: 480px) {
   #login h2 {
     width: 320px;

@@ -22,11 +22,22 @@ function playFullScreen(videoElement) {
   videoElement.play();
 }
 
-// いずれかのキーが押されたら
-document.addEventListener("keypress", function () {
-  playFullScreen(video);
-});
+// ページ訪問時に一度だけモーダルを表示
+window.addEventListener("load", function() {
+  if (!sessionStorage.getItem("first_visit")) {
+    sessionStorage.setItem("first_visit", "on");
+    let welcome = document.getElementById("welcome");
+    UIkit.modal(welcome).show();
+    welcome.onclick = function() {
+      UIkit.modal(welcome).hide();
+      playFullScreen(video);
+    }
+  }
+})
 
-// TODO: 認証をページ上で実施することでキーイベントなしで自動再生いけるのでは
-// → 再生はいけたのにフルスクリーンはできない，どうにかsubmitボタンと連携したい
-playFullScreen(video);
+// Fキーでフルスクリーン化するショートカット
+document.addEventListener("keypress", event => {
+  if (event.key === "f") {
+    toggleFullScreen(video);
+  }
+})
