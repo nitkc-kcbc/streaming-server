@@ -2,3 +2,4 @@ node_modules/
 nodejs-app/db/users.js
 nodejs-app/hls/
 *.log
+*.pem

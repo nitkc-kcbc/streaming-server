@@ -24,9 +24,10 @@ Basic認証付きの簡易的な配信システム
 
 ### 起動
 
-1. `nodejs-app/db/users-template.js`を`users.js`として同じディレクトリに複製
-2. `users.js`でユーザ情報を設定
-3. `docker-compose.yml`があるディレクトリ上で`$ docker-compose up`を実行
+1. 証明書ファイル(`privkey.pem`, `cert.pem`)を`nodejs-app/Dockerfile-app`と同じディレクトリに配置([理由](#証明書ファイルを複製する理由))
+2. `nodejs-app/db/users-template.js`を`users.js`として同じディレクトリに複製
+3. `users.js`でユーザ情報を設定
+4. `docker-compose.yml`があるディレクトリ上で`$ docker-compose up`を実行
 
 ※ 初回はイメージ作成が含まれるため、実行までに時間がかかります。
 
@@ -74,3 +75,15 @@ memory=6GB
 2. 「Settings」から「Resources」を表示
 3. 「Memory」項目のスライダーで値を変更
 4. 右下の「Apply & Restart」で変更を反映
+
+### 証明書ファイルを複製する理由
+
+Dockerfileには、**親ディレクトリを参照できない**という仕様があります。  
+例えば、`COPY ../hoge .`といったことができません。
+
+これは、`docker build`がcontext対象ディレクトリ(とサブディレクトリ)のみをdockerデーモンに送信するためです。
+
+context対象ディレクトリとは、各Dockerfileでイメージをビルドする時のワーキングディレクトリ、すなわち`docker build`を実行する場所を指します。  
+これは`docker-compose.yml`の`build: context`で任意指定できます。
+
+参照したいファイルが一階層上程度であれば`docker build -f`で対処可能ですが、証明書の場合は場所が離れているため、単純にファイルを複製するという手段をとりました。
