@@ -5,10 +5,8 @@ services:
     build:
       context: ./nodejs-app
       dockerfile: Dockerfile-app
-    ports:
-      - 80:${HTTP_PORT}
-      - 443:${HTTPS_PORT}
-    env_file: .env
+    expose:
+      - 3000
     volumes:
       - ./nodejs-app:/home/nodeapp
       - /home/nodeapp/node_modules
@@ -22,8 +20,12 @@ services:
       context: ./nginx
       dockerfile: Dockerfile-nginx
     ports:
+      - 80:80
+      - 443:443
       - 1935:1935
     volumes:
       - hls:/home/nodeapp/hls
+    environment:
+      - DOMAIN="studio.k.kumamoto-nct.ac.jp"
 volumes:
   hls:

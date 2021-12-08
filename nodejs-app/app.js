@@ -3,19 +3,6 @@ const app = express();
 const passport = require("./auth");
 const session = require("express-session");
 const flash = require("connect-flash");
-const fs = require("fs");
-const http = require("http");
-const https = require("https");
-
-const HTTP_PORT = process.env.HTTP_PORT;
-const HTTPS_PORT = process.env.HTTPS_PORT;
-const options = {
-  port: HTTPS_PORT,
-  key: fs.readFileSync(process.env.RSA_KEY),
-  cert: fs.readFileSync(process.env.RSA_CRT),
-  minVersion: "TLSv1.2",
-  maxVersion: "TLSv1.3"
-};
 
 app.use(
   session({
@@ -79,14 +66,7 @@ app.use("/hls",
   express.static("hls")
 );
 
-// ${HTTPS_PORT}番で待ち受け
-https.createServer(options, app).listen(HTTPS_PORT, () => {
-  console.log(`Express server listening on port ${HTTPS_PORT}[HTTPS].`);
+// 3000番で待ち受け
+app.listen(3000, () => {
+  console.log(`Express server listening.`);
 });
-
-// HTTP接続をHTTPSへリダイレクト
-http.createServer(
-  express().all("*", (req, res) => {
-    res.redirect(`https://${req.hostname}${req.url}`);
-  })
-).listen(HTTP_PORT);

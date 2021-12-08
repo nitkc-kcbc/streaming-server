@@ -24,7 +24,7 @@ Basic認証付きの簡易的な配信システム
 
 ### 起動
 
-1. 証明書ファイル(`privkey.pem`, `cert.pem`)を`nodejs-app/Dockerfile-app`と同じディレクトリに配置([理由](#証明書ファイルを複製する理由))
+1. 証明書ファイル(`privkey.pem`, `cert.pem`)を`nginx/nginx.conf`と同じディレクトリに配置([理由](#証明書ファイルを複製する理由))
 2. `nodejs-app/db/users-template.js`を`users.js`として同じディレクトリに複製
 3. `users.js`でユーザ情報を設定
 4. `docker-compose.yml`があるディレクトリ上で`$ docker-compose up`を実行
