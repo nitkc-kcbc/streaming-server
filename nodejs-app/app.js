@@ -83,6 +83,18 @@ app.post(
   }
 );
 
+// 配信開始通知の受信&ストリームキーの認証
+app.post(
+  "/live/on_publish",
+  (req, res, next) => {
+    if (req.body.name == streamkey) {
+      res.status(200).send();
+    } else {
+      res.status(404).send();
+    }
+  }
+)
+
 app.post(
   "/change_streamkey",
   adminAuthMiddleware,
