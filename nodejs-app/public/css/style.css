@@ -14,6 +14,11 @@ body {
   user-select: none;
 }
 
+/* 等幅フォント */
+.monospace {
+  font-family: monospace;
+}
+
 /* マウスホバー時のカーソルタイプ */
 .pointer {
   cursor: pointer;
@@ -53,7 +58,7 @@ body {
   text-align: center;
 }
 
-/* フォーム全体 */
+/* ログインフォーム全体 */
 #login form {
   width: 320px;
   margin: auto;
@@ -102,6 +107,11 @@ body {
 
 /* モーダル */
 #welcome {
+  border-radius: 4px;
+}
+
+/* adminページ */
+#admin form input[type=submit] {
   border-radius: 4px;
 }
 

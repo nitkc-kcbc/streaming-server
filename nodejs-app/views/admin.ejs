@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin</title>
+
+  <!-- UIkit -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.9.4/dist/css/uikit.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/uikit@3.9.4/dist/js/uikit.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/uikit@3.9.4/dist/js/uikit-icons.min.js"></script>
+
+  <!-- original -->
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body class="noselect">
+  <nav class="uk-navbar-container" uk-navbar>
+    <div class="uk-navbar-left">
+      <div class="uk-margin-left">KCBC 簡易配信システム 管理者ページ</div>
+    </div>
+    <div class="uk-navbar-right">
+      <ul class="uk-navbar-nav">
+        <li><a href="/">Main</a></li>
+        <li class="uk-active"><a href="/admin">Admin</a></li>
+      </ul>
+    </div>
+  </nav>
+  <% if (message && message.length !== 0) {%>
+    <script>
+      UIkit.notification({
+        message: '<%= message %>',
+        status: 'success'
+      });
+    </script>
+  <%}%>
+  <main id="admin" class="uk-margin-top uk-container" uk-height-viewport="offset-top: true">
+  <h3>ストリームキーの変更</h3>
+  <form id="change_streamkey" action="/change_streamkey" method="post" autocomplete="off" onsubmit="return check()">
+    <p>
+      現在の値: <span class="monospace"><%= streamkey %></span>
+    </p>
+    <div class="uk-margin">
+      <input class="uk-input uk-form-width-small uk-form-small monospace" type="text" name="streamkey" id="streamkey"
+        pattern="[\d\w\-_]+" title="半角英数字 / ハイフン(-) / アンダーバー(_)のみ有効" required
+        placeholder="streamkey" />
+      <input type="submit" id="change-streamkey" class="uk-button uk-button-default uk-button-small" value="変更" />
+    </div>
+  </form>
+
+  <h3 class="uk-h3">視聴者認証の有効化</h3>
+  <form id="activate_auth" action="/activate_auth" method="post">
+    <p>
+      <label for="checkbox_activate_auth" class="pointer">チェックで有効化</label>
+      <input type="checkbox" name="is_active" id="checkbox_activate_auth" class="uk-checkbox"
+      <% if (is_active_auth) { %>
+        checked
+      <% } %>
+      />
+    </p>
+  </form>
+
+  <h3>hlsファイルのダウンロード</h3>
+  <form action="/download_hls" method="post">
+    <p>
+      <input type="submit" id="download" class="uk-button uk-button-primary" value="ダウンロード" />
+    </p>
+  </form>
+
+  <!-- TODO: Danger Zone デザイン -->
+  <div class="danger-zone">
+    <h3>hlsファイルの一括削除</h3>
+    <form action="/delete_hls" method="post" onsubmit="return confirm('本当に削除しますか?')">
+      <p>
+        <input type="submit" id="delete" class="uk-button uk-button-danger" value="削除" />
+      </p>
+    </form>
+  </div>
+</main>
+
+<script>
+  const el_streamkey = document.getElementById("streamkey");
+  function check() {
+    // TODO: UIkitでモーダルつくる
+    if (confirm("本当にストリームキーを変更しますか?")) {
+      return true;
+    } else {
+      document.getElementById("change_streamkey").reset();
+      return false;
+    };
+  };
+  const checkbox_activate_auth = document.getElementById("checkbox_activate_auth");
+  checkbox_activate_auth.addEventListener("change", (e) => {
+    if (checkbox_activate_auth.checked || confirm("この操作により、配信映像視聴に係る認証処理がスキップされます。")) {
+      document.forms.activate_auth.submit();
+    } else {
+      checkbox_activate_auth.checked = true;
+    }
+  });
+</script>
+</body>
+</html>

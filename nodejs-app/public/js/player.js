@@ -1,5 +1,10 @@
+const streamkey = document.cookie
+  .split('; ').
+  find(row => row.startsWith('streamkey='))
+  .split('=')[1];
+
 let video = document.getElementById("video");
-let videoSrc = "./hls/kcbc.m3u8";
+let videoSrc = `./hls/${streamkey}.m3u8`;
 
 if (Hls.isSupported()) {
   var hls = new Hls();

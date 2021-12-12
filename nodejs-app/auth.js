@@ -13,7 +13,7 @@ passport.use(
     (req, username, password, done) => {
       const target = users.find((user) => user.username == username)
       if (target && target.password == password) {
-        return done(null, true);
+        return done(null, {username: target.username, grant: target.grant});
       } else {
         req.flash("auth_error", "ユーザー名かパスワードが間違っています。");
         return done(null, false);
@@ -24,7 +24,7 @@ passport.use(
 
 // ユーザ情報をセッションに保存する
 passport.serializeUser((user, done) => {
-  done(null, {username: user.username, grant: user.grant});
+  done(null, user);
 });
 
 // ユーザ情報を返す
