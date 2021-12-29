@@ -1,0 +1,141 @@
+<h3>ユーザーの管理</h3>
+
+<button class="uk-button uk-button-primary" type="button" id="create_user">ユーザーの作成</button>
+<button class="uk-button uk-button-danger" id="delete_user" type="button" style="visibility: hidden;" onclick="deleteUser()">選択したユーザーの削除</button>
+
+<table class="uk-table uk-table-justify uk-table-divider" id="users_table">
+  <thead>
+    <tr>
+      <th class="uk-table-shrink"><input class="uk-checkbox" id="users_checkbox" type="checkbox"></th>
+      <th class="uk-width-small">ユーザー名</th>
+      <th class="uk-width-small">権限レベル</th>
+      <th class="uk-width-small"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <%_ for (let i in users) { _%>
+      <tr>
+        <td><input class="uk-checkbox" type="checkbox" name="user_checkbox"></td>
+        <td name="username"><%= users[i].username %></td>
+        <td name="grant"><%= users[i].grant %></td>
+        <td><button class="uk-button uk-button-default" type="button" name="change_user_button">変更</button></td>
+      </tr>
+    <%_ } _%>
+  </tbody>
+</table>
+
+<div id="manage-user-modal" uk-modal>
+  <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
+    <form class="uk-form-stacked" name="manage_user" method="post" autocomplete="off">
+      <legend class="uk-legend" name="legend"></legend>
+      <div class="uk-margin">
+        <label class="uk-form-label">ユーザー名</label>
+        <div class="uk-form-controls">
+          <input class="uk-input" type="text" name="username" placeholder="ユーザー名を入力してください" autofocus required />
+        </div>
+      </div>
+      <div class="uk-margin">
+        <select class="uk-select" name="grant">
+          <option>viewer</option>
+          <option>admin</option>
+        </select>
+      </div>
+      <div class="uk-margin">
+        <label class="uk-form-label">パスワード</label>
+        <div class="uk-form-controls">
+        <input class="uk-input" type="password" name="password" id="password"
+          placeholder="パスワードを入力してください" required />
+        </div>
+      </div>
+      <p class="uk-text-right">
+        <button class="uk-button uk-button-default uk-modal-close" type="button">キャンセル</button>
+        <input type="submit" class="uk-button uk-button-primary" value="作成"/>
+      </p>
+    </form>
+  </div>
+</div>
+
+<script>
+  // ユーザー情報管理のチェックボックス全選択
+  const users_checkbox = document.getElementById("users_checkbox");
+  const user_checkboxes = document.getElementsByName("user_checkbox");
+  users_checkbox.addEventListener("change", function() {
+    for (let i = 0; i < user_checkboxes.length; i++) {
+      user_checkboxes[i].checked = this.checked;
+    }
+    manageDeleteUserButton();
+  });
+  // どれか1つのチェックが外されたら全選択チェックボックスのチェックも外す
+  for (let i = 0; i < user_checkboxes.length; i++) {
+    user_checkboxes[i].addEventListener("change", function() {
+      if (!this.checked) {
+        users_checkbox.checked = false;
+      }
+      manageDeleteUserButton();
+    });
+  };
+  // 配信情報管理のチェックボックスが1つ以上チェックされている場合、削除ボタンを表示
+  function manageDeleteUserButton() {
+    if (isNotCheckedAllUsers()) {
+      delete_user.style.visibility = "hidden";
+    } else {
+      delete_user.style.visibility = "visible";
+    }
+  }
+  function isNotCheckedAllUsers() {
+    for (let i = 0; i < user_checkboxes.length; i++) {
+      if (user_checkboxes[i].checked) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  const manage_user_modal = document.getElementById("manage-user-modal");
+  const manage_user = document.forms.manage_user;
+
+  // ユーザーの作成
+  create_user.addEventListener("click", function() {
+    manage_user.action = "/create_user";
+    manage_user.reset();
+    manage_user.querySelector("legend").innerText = "ユーザーの作成";
+    UIkit.modal(manage_user_modal).show();
+  })
+
+  // ユーザー情報の変更
+  const user_buttons = document.getElementsByName("change_user_button");
+  for (let i = 0; i < user_buttons.length; i++) {
+    user_buttons[i].addEventListener("click", function() {
+      // ユーザー情報変更モーダルの各項目に値をセット
+      const user = this.closest("tr").children;
+      manage_user.username.value = user.username.innerText;
+      manage_user.grant.value = user.grant.innerText;
+
+      // モーダルを表示
+      manage_user.action = "/change_user";
+      manage_user.querySelector("legend").innerText = "ユーザー情報の変更";
+      UIkit.modal(manage_user_modal).show();
+    });
+  }
+
+  function deleteUser() {
+    if (confirm("本当に削除しますか?")) {
+      let users = [];
+      for (let i = 0; i < user_checkboxes.length; i++) {
+        if (users_table.rows[i+1].querySelector("input").checked) {
+          users.push(users_table.rows[i+1].cells.username.innerText);
+        }
+      }
+      // 動的にフォームを生成
+      let form = document.createElement("form");
+      form.action = "/delete_user";
+      form.method = "post";
+      document.body.append(form);
+      form.addEventListener('formdata', (event) => {
+        // ストリームキーのリストをJSON文字列で送信
+        event.formData.set("users", JSON.stringify(users));
+      });
+      form.submit();
+    };
+  };
+</script>

@@ -1,8 +1,3 @@
-const streamkey = document.cookie
-  .split('; ').
-  find(row => row.startsWith('streamkey='))
-  .split('=')[1];
-
 let video = document.getElementById("video");
 let videoSrc = `./hls/${streamkey}.m3u8`;
 
@@ -27,18 +22,29 @@ function playFullScreen(videoElement) {
   videoElement.play();
 }
 
-// ページ訪問時に一度だけモーダルを表示
-window.addEventListener("load", function() {
-  if (!sessionStorage.getItem("first_visit")) {
-    sessionStorage.setItem("first_visit", "on");
-    let welcome = document.getElementById("welcome");
-    UIkit.modal(welcome).show();
-    welcome.onclick = function() {
-      UIkit.modal(welcome).hide();
+function createMuteAlert() {
+  let alert = document.createElement("div");
+  alert.id = "mute";
+  alert.className = "uk-alert-warning uk-position-large uk-position-top-right uk-overlay uk-animation-shake pointer";
+  alert.innerHTML = `<a class="uk-alert-close" uk-close></a><p>ビデオの音声がミュートになっています。</p>`;
+  document.body.append(alert);
+}
+
+function showMuteAlert() {
+  if (video.muted) {
+    createMuteAlert();
+    mute.onclick = function() {
+      UIkit.alert(mute).close();
+      video.muted = false;
       playFullScreen(video);
     }
   }
-})
+}
+
+// ページ訪問時にアラートを表示
+window.addEventListener("load", showMuteAlert);
+// 消音時にアラートを表示
+video.addEventListener("volumechange", showMuteAlert)
 
 // Fキーでフルスクリーン化するショートカット
 document.addEventListener("keypress", event => {

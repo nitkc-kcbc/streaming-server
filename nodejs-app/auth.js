@@ -1,6 +1,6 @@
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
-const users = require("./db/users").Users;
+const users = require("./db/users.json");
 
 // 認証方法の定義
 passport.use(

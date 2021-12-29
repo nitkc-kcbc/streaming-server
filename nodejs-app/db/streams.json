@@ -1,0 +1,17 @@
+[
+    {
+        "title": "Test1",
+        "description": "テスト配信枠1",
+        "streamkey": "test1"
+    },
+    {
+        "title": "Test2",
+        "description": "テスト配信枠2",
+        "streamkey": "test2"
+    },
+    {
+        "title": "Test3",
+        "description": "テスト配信枠3",
+        "streamkey": "test3"
+    }
+]

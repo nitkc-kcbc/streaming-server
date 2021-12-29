@@ -1,0 +1,24 @@
+<h3 class="uk-h3">視聴者認証の有効化</h3>
+<form id="activate_auth" action="/activate_auth" method="post">
+  <p>
+    <label for="checkbox_activate_auth" class="uk-switch">
+      <input type="checkbox" name="is_active" id="checkbox_activate_auth"
+      <% if (isActiveAuth) { %>
+        checked
+      <% } %>
+      />
+      <span class="uk-switch-slider"></span>
+    </label>
+  </p>
+</form>
+
+<script>
+  const checkbox_activate_auth = document.getElementById("checkbox_activate_auth");
+  checkbox_activate_auth.addEventListener("change", (e) => {
+    if (checkbox_activate_auth.checked || confirm("この操作により、配信映像視聴に係る認証処理がスキップされます。")) {
+      document.forms.activate_auth.submit();
+    } else {
+      checkbox_activate_auth.checked = true;
+    }
+  });
+</script>

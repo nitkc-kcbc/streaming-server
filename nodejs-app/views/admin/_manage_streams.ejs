@@ -1,0 +1,145 @@
+<h3>配信情報の管理</h3>
+
+<button class="uk-button uk-button-primary" type="button" id="create_stream">配信枠の作成</button>
+<button class="uk-button uk-button-danger" id="delete_stream" type="button" style="visibility: hidden;" onclick="deleteStream()">選択したストリームの削除</button>
+
+<table class="uk-table uk-table-justify uk-table-divider" id="streams_table">
+  <thead>
+    <tr>
+      <th class="uk-table-shrink"><input class="uk-checkbox" id="streams_checkbox" type="checkbox"></th>
+      <th class="uk-width-small">タイトル</th>
+      <th class="uk-width-medium">説明</th>
+      <th class="uk-width-small">ストリームキー</th>
+      <th class="uk-width-small"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <%_ for (let i in streams) { _%>
+      <tr>
+        <td><input class="uk-checkbox" type="checkbox" name="stream_checkbox"></td>
+        <td name="title"><%= streams[i].title %></td>
+        <td name="desc"><%= streams[i].description %></td>
+        <td name="streamkey"><%= streams[i].streamkey %></td>
+        <td><button class="uk-button uk-button-default" type="button" name="change_stream_button">変更</button></td>
+      </tr>
+    <%_ } _%>
+  </tbody>
+</table>
+
+<div id="manage-stream-modal" uk-modal>
+  <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
+    <form class="uk-form-stacked" name="manage_stream" method="post" autocomplete="off">
+      <legend class="uk-legend" name="legend"></legend>
+      <div class="uk-margin">
+        <label class="uk-form-label">タイトル</label>
+        <div class="uk-form-controls">
+          <input class="uk-input" type="text" name="title" placeholder="タイトルを入力してください" autofocus required />
+        </div>
+      </div>
+      <div class="uk-margin">
+        <label class="uk-form-label">説明</label>
+        <div class="uk-form-controls">
+          <textarea class="uk-textarea" name="description" rows="2" placeholder="任意の説明が入力できます"></textarea>
+        </div>
+      </div>
+      <div class="uk-margin">
+        <label class="uk-form-label">ストリームキー</label>
+        <div class="uk-form-controls">
+        <input class="uk-input" type="text" name="streamkey" id="streamkey"
+          pattern="[\d\w\-_]+" title="半角英数字 / ハイフン(-) / アンダーバー(_)のみ有効"
+          placeholder="ストリームキーを入力してください" required />
+        </div>
+      </div>
+      <p class="uk-text-right">
+        <button class="uk-button uk-button-default uk-modal-close" type="button">キャンセル</button>
+        <input type="submit" class="uk-button uk-button-primary" value="作成"/>
+      </p>
+    </form>
+  </div>
+</div>
+
+<script>
+  // 配信情報管理のチェックボックス全選択
+  const streams_checkbox = document.getElementById("streams_checkbox");
+  const stream_checkboxes = document.getElementsByName("stream_checkbox");
+  streams_checkbox.addEventListener("change", function() {
+    for (let i = 0; i < stream_checkboxes.length; i++) {
+      stream_checkboxes[i].checked = this.checked;
+    }
+    manageDeleteStreamButton();
+  });
+  // どれか1つのチェックが外されたら全選択チェックボックスのチェックも外す
+  for (let i = 0; i < stream_checkboxes.length; i++) {
+    stream_checkboxes[i].addEventListener("change", function() {
+      if (!this.checked) {
+        streams_checkbox.checked = false;
+      }
+      manageDeleteStreamButton();
+    });
+  };
+  // 配信情報管理のチェックボックスが1つ以上チェックされている場合、削除ボタンを表示
+  function manageDeleteStreamButton() {
+    if (isNotCheckedAllStreams()) {
+      delete_stream.style.visibility = "hidden";
+    } else {
+      delete_stream.style.visibility = "visible";
+    }
+  }
+  function isNotCheckedAllStreams() {
+    for (let i = 0; i < stream_checkboxes.length; i++) {
+      if (stream_checkboxes[i].checked) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  const manage_stream_modal = document.getElementById("manage-stream-modal");
+  const manage_stream = document.forms.manage_stream;
+
+  // 配信情報の作成
+  create_stream.addEventListener("click", function() {
+    manage_stream.action = "/create_stream";
+    manage_stream.reset();
+    manage_stream.querySelector("legend").innerText = "配信枠の作成";
+    UIkit.modal(manage_stream_modal).show();
+  })
+
+  // 配信情報の変更
+  const streams = document.getElementsByName("change_stream_button");
+  for (let i = 0; i < streams.length; i++) {
+    streams[i].addEventListener("click", function() {
+      // 配信枠変更モーダルの各項目に値をセット
+      const stream = this.closest("tr").children;
+      manage_stream.title.value = stream.title.innerText;
+      manage_stream.description.value = stream.desc.innerText;
+      manage_stream.streamkey.value = stream.streamkey.innerText;
+
+      // モーダルを表示
+      manage_stream.action = "/change_stream";
+      manage_stream.querySelector("legend").innerText = "配信枠の変更";
+      UIkit.modal(manage_stream_modal).show();
+    });
+  }
+
+  function deleteStream() {
+    if (confirm("本当に削除しますか?")) {
+      let keys = [];
+      for (let i = 0; i < stream_checkboxes.length; i++) {
+        if (streams_table.rows[i+1].querySelector("input").checked) {
+          keys.push(streams_table.rows[i+1].cells.streamkey.innerText);
+        }
+      }
+      // 動的にフォームを生成
+      let form = document.createElement("form");
+      form.action = "/delete_stream";
+      form.method = "post";
+      document.body.append(form);
+      form.addEventListener('formdata', (event) => {
+        // ストリームキーのリストをJSON文字列で送信
+        event.formData.set("streamkeys", JSON.stringify(keys));
+      });
+      form.submit();
+    };
+  };
+</script>

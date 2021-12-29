@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>配信一覧 | KCBC Live Streaming System</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- UIkit -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.9.4/dist/css/uikit.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/uikit@3.9.4/dist/js/uikit.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/uikit@3.9.4/dist/js/uikit-icons.min.js"></script>
+
+  <!-- original -->
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+  <%- include('./_navbar', {headerTitle: ""}) %>
+
+  <main class="uk-margin-top uk-container" uk-height-viewport="offset-top: true">
+  <!-- 配信一覧 -->
+  <%_ if (streams.length == 0) { _%>
+    <div class="uk-cover-container">
+      配信予定がありません。
+    </div>
+  <%_ } _%>
+  <div class="uk-child-width-1-2@s uk-child-width-1-3@m" uk-grid="masonry: true">
+    <%_ for (let i in streams) { _%>
+      <div>
+        <% const v = streams[i].ok ? `/watch?v=${streams[i].streamkey}` : "javascript:void(0)"; %>
+        <a href="<%= v %>" class="uk-card uk-card-default uk-card-body uk-card-hover uk-link-toggle">
+          <%_ if (streams[i].ok) { _%>
+            <div class="uk-card-badge uk-label">配信中</div>
+          <%_ } _%>
+          <h3 class="uk-card-title"><%= streams[i].title %></h3>
+          <p>
+            <%= streams[i].description %>
+          </p>
+        </a>
+      </div>
+    <%_ } _%>
+  </div>
+
+  <hr class="uk-divider-vertical">
+  <h3>注意書き</h3>
+  <p>
+    該当の配信が開始されるまで、配信ページへ移動することはできません。
+  </p>
+  <p>
+    このページをリロードすることで、配信状況が更新されます。
+  </p>
+  <p>
+    配信映像は、ミュート状態で再生が開始されます。<br>画面右上部に表示されるアラートをクリックすることでミュートが解除され、映像が全画面表示されます。
+  </p>
+
+  <script src="./js/player.js"></script>
+  </main>
+</body>
+</html>

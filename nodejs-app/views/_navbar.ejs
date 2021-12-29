@@ -1,0 +1,18 @@
+<nav class="uk-navbar-container" uk-navbar>
+  <div class="uk-navbar-left">
+    <a class="uk-navbar-toggle" uk-navbar-toggle-icon href="#"></a>
+    <div class="uk-navbar-dropdown" uk-dropdown="mode: click">
+      <ul class="uk-nav uk-navbar-dropdown-nav">
+        <li><a href="/"><span uk-icon="list"></span>配信一覧</a></li>
+        <%_ if (grant == "admin") { _%>
+          <li><a href="/admin"><span uk-icon="world"></span>管理者ページ</a></li>
+        <%_ } _%>
+        <li class="uk-nav-divider"></li>
+        <li><a href="/login"><span uk-icon="sign-in"></span>ログイン</a></li>
+        <li><a href="/logout"><span uk-icon="sign-out"></span>ログアウト</a></li>
+      </ul>
+  </div>
+    <a href="/" class="uk-link-reset">KCBC 簡易配信システム</a>
+    <span class="uk-margin-small-left"><%= headerTitle %></span>
+  </div>
+</nav>

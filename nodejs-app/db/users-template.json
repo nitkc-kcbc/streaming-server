@@ -1,0 +1,12 @@
+[
+    {
+        "username": "admin",
+        "password": "admin",
+        "grant": "admin"
+    },
+    {
+        "username": "user",
+        "password": "!Passw0rd123",
+        "grant": "viewer"
+    }
+]

@@ -1,0 +1,13 @@
+<h3>hlsファイルのダウンロード</h3>
+<form action="/download_hls" method="post">
+  <p>
+    <input type="submit" id="download" class="uk-button uk-button-primary" value="ダウンロード" />
+  </p>
+</form>
+
+<h3>hlsファイルの一括削除</h3>
+<form action="/delete_hls" method="post" onsubmit="return confirm('本当に削除しますか?')">
+  <p>
+    <input type="submit" id="delete" class="uk-button uk-button-danger" value="削除" />
+  </p>
+</form>

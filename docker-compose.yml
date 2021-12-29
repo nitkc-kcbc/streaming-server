@@ -13,6 +13,7 @@ services:
       - hls:/home/nodeapp/hls
     working_dir: /home/nodeapp
     command: [sh, -c, node ./app.js]
+    init: true
 
   nginx:
     container_name: kcbc-streaming-server-nginx
