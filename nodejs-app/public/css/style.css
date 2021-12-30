@@ -104,9 +104,12 @@ body {
   margin-bottom: 14px;
 }
 
-/* モーダル */
-#welcome {
-  border-radius: 4px;
+/* 配信視聴ページ */
+#watch .no-other-streams {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh / 3);
 }
 
 /* adminページ */
