@@ -25,9 +25,11 @@ Basic認証付きの簡易的な配信システム
 ### 起動
 
 1. 証明書ファイル(`privkey.pem`, `cert.pem`)を`nginx/nginx.conf`と同じディレクトリに配置([理由](#証明書ファイルを複製する理由))
-2. `nodejs-app/db/users-template.js`を`users.js`として同じディレクトリに複製
-3. `users.js`でユーザ情報を設定
+2. `users.json`で初期ユーザー情報を設定(管理者必須)
+3. (任意)`streams.json`で初期配信枠を設定
 4. `docker-compose.yml`があるディレクトリ上で`$ docker-compose up`を実行
+
+※ ユーザー情報と配信枠は、起動後に管理者ページから追加・変更・削除が可能です。
 
 ※ 初回はイメージ作成が含まれるため、実行までに時間がかかります。
 
