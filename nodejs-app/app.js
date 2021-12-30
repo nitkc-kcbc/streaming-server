@@ -80,6 +80,13 @@ function countAdmins() {
   return cnt;
 }
 
+function getUserGrant(req) {
+  if (!isActiveAuth && req.user === undefined) {
+    return "viewer";
+  }
+  return req.user.grant;
+}
+
 function getStreamIndex(key) {
   return streams.findIndex(v => v.streamkey == key);
 }
@@ -104,7 +111,7 @@ app.get("/", authMiddleware, (req, res) => {
   checkStreamingStatus();
   res.render("streams.ejs", {
     streams: streams,
-    grant: req.user.grant
+    grant: getUserGrant(req)
   });
 });
 
@@ -113,7 +120,7 @@ app.get("/watch", authMiddleware, (req, res) => {
   res.render("watch.ejs", {
     streams: streams,
     streamNo: getStreamIndex(req.query.v),
-    grant: req.user.grant
+    grant: getUserGrant(req)
   });
 });
 
