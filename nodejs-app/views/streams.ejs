@@ -27,9 +27,9 @@
   <div class="uk-child-width-1-2@s uk-child-width-1-3@m" uk-grid="masonry: true">
     <%_ for (let i in streams) { _%>
       <div>
-        <% const v = streams[i].ok ? `/watch?v=${streams[i].streamkey}` : "javascript:void(0)"; %>
+        <% const v = streams[i].is_live ? `/watch?v=${streams[i].streamkey}` : "javascript:void(0)"; %>
         <a href="<%= v %>" class="uk-card uk-card-default uk-card-body uk-card-hover uk-link-toggle">
-          <%_ if (streams[i].ok) { _%>
+          <%_ if (streams[i].is_live) { _%>
             <div class="uk-card-badge uk-label">配信中</div>
           <%_ } _%>
           <h3 class="uk-card-title"><%= streams[i].title %></h3>

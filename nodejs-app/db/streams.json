@@ -13,5 +13,25 @@
         "title": "Test3",
         "description": "テスト配信枠3",
         "streamkey": "test3"
+    },
+    {
+        "title": "Test4",
+        "description": "テスト配信枠4",
+        "streamkey": "test4"
+    },
+    {
+        "title": "Test5",
+        "description": "テスト配信枠5",
+        "streamkey": "test5"
+    },
+    {
+        "title": "Test6",
+        "description": "テスト配信枠6",
+        "streamkey": "test6"
+    },
+    {
+        "title": "Test7",
+        "description": "テスト配信枠7",
+        "streamkey": "test7"
     }
 ]

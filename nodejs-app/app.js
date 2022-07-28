@@ -63,9 +63,9 @@ const adminAuthMiddleware = (req, res, next) => {
 function checkStreamingStatus() {
   for (let i in streams) {
     if (fs.existsSync(`./hls/${streams[i].streamkey}.m3u8`)) {
-      streams[i].ok = true;
+      streams[i].is_live = true;
     } else {
-      streams[i].ok = false;
+      streams[i].is_live = false;
     }
   }
 }
@@ -123,6 +123,26 @@ app.get("/watch", authMiddleware, (req, res) => {
     grant: getUserGrant(req)
   });
 });
+
+app.get(
+  '/multiview',
+  authMiddleware,
+  (req, res) => {
+    res.render('multiview.ejs', {
+      streams: streams,
+      grant: getUserGrant(req)
+    });
+  }
+);
+
+// API
+app.get("/api/streams",
+  authMiddleware,
+  (req, res) => {
+    checkStreamingStatus();
+    res.json(streams);
+  }
+);
 
 app.get("/admin", adminAuthMiddleware, (req, res) => {
   adminData.activeTabNo = 0;
